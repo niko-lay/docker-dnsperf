@@ -6,15 +6,10 @@ metadata:
   namespace: default
 data:
   records.txt: |-
-    www.google.com A
-    mail.google.com A
-    chat.google.com A
-    www.yahoo.com A
-    www.microsoft.com A
-    www.netflix.com A
-    kubernetes.io A
-    kube-dns.kube-system.svc.cluster.local A
-    kubernetes-dashboard.kube-system.svc.cluster.local A
+    test-service-2
+    test-service-1
+    google.com
+    kube-dns A
 
 ---
 apiVersion: apps/v1
@@ -45,13 +40,14 @@ spec:
       containers:
       - env:
         - name: MAX_TEST_SECONDS
-          value: "30"
+          value: "60"
         - name: MAX_QPS
           value: "100000"
         # please replace the ipaddr with the following command result output
         # $ kubectl get -n kube-system svc kube-dns -o go-template='{{.spec.clusterIP}}{{"\n"}}'
         - name: DNS_SERVER_ADDR
-          value: "10.20.30.40"
+          #value: "169.254.20.10"
+          value: 172.20.0.10
         name: dnsperf
         image: guessi/dnsperf:alpine
         imagePullPolicy: Always
@@ -64,4 +60,41 @@ spec:
           configMap:
             name: dns-records-config
       dnsPolicy: ClusterFirst
-      restartPolicy: Always
+      restartPolicy: Never
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dnsperf-deployment
+  namespace: default
+  labels:
+    app: dnsperf
+spec:
+  parallelism: 5
+  template:
+    metadata:
+      labels:
+        app: dnsperf
+    spec:
+      containers:
+      - env:
+        - name: MAX_TEST_SECONDS
+          value: "60"
+        - name: MAX_QPS
+          value: "100000"
+        # please replace the ipaddr with the following command result output
+        # $ kubectl get -n kube-system svc kube-dns -o go-template='{{.spec.clusterIP}}{{"\n"}}'
+        - name: DNS_SERVER_ADDR
+          value: "172.20.0.10"
+        name: dnsperf
+        image: guessi/dnsperf:alpine
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: dns-records-volume
+          mountPath: /opt/
+          readOnly: true
+      volumes:
+        - name: dns-records-volume
+          configMap:
+            name: dns-records-config
+      restartPolicy: Never
