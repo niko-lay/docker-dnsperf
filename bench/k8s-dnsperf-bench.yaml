@@ -12,55 +12,6 @@ data:
     kube-dns A
 
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: dnsperf-deployment
-  namespace: default
-  labels:
-    app: dnsperf
-spec:
-  minReadySeconds: 3
-  progressDeadlineSeconds: 600
-  replicas: 10
-  revisionHistoryLimit: 3
-  selector:
-    matchLabels:
-      app: dnsperf
-  strategy:
-    rollingUpdate:
-      maxSurge: 50%
-      maxUnavailable: 0%
-    type: RollingUpdate
-  template:
-    metadata:
-      labels:
-        app: dnsperf
-    spec:
-      containers:
-      - env:
-        - name: MAX_TEST_SECONDS
-          value: "60"
-        - name: MAX_QPS
-          value: "100000"
-        # please replace the ipaddr with the following command result output
-        # $ kubectl get -n kube-system svc kube-dns -o go-template='{{.spec.clusterIP}}{{"\n"}}'
-        - name: DNS_SERVER_ADDR
-          #value: "169.254.20.10"
-          value: 172.20.0.10
-        name: dnsperf
-        image: guessi/dnsperf:alpine
-        imagePullPolicy: Always
-        volumeMounts:
-        - name: dns-records-volume
-          mountPath: /opt/
-          readOnly: true
-      volumes:
-        - name: dns-records-volume
-          configMap:
-            name: dns-records-config
-      dnsPolicy: ClusterFirst
-      restartPolicy: Never
 
 apiVersion: batch/v1
 kind: Job
