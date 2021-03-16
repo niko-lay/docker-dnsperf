@@ -1,20 +1,20 @@
 # Dockerized DNS Performance Testing Tool
 
-[![Docker Stars](https://img.shields.io/docker/stars/guessi/dnsperf.svg)](https://hub.docker.com/r/guessi/dnsperf/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/guessi/dnsperf.svg)](https://hub.docker.com/r/guessi/dnsperf/)
-[![Docker Automated](https://img.shields.io/docker/automated/guessi/dnsperf.svg)](https://hub.docker.com/r/guessi/dnsperf/)
+[![Docker Stars](https://img.shields.io/docker/stars/nikolay2007/dnsperf.svg)](https://hub.docker.com/r/nikolay2007/dnsperf/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nikolay2007/dnsperf.svg)](https://hub.docker.com/r/nikolay2007/dnsperf/)
+[![Docker Automated](https://img.shields.io/docker/automated/nikolay2007/dnsperf.svg)](https://hub.docker.com/r/nikolay2007/dnsperf/)
 
 
 ## Integrated Items
 
-* DNSPerf 2.2.1
+* DNSPerf 2.5.0
 
 
 ## Usage
 
 To run dnsperf with default settings, use the command below:
 
-    $ docker run -it guessi/dnsperf:alpine
+    $ docker run -it nikolay2007/dnsperf
 
 Or run dnsperf with customized settings:
 
@@ -22,7 +22,7 @@ Or run dnsperf with customized settings:
         -e MAX_TEST_SECONDS=60                \
         -e DNS_SERVER_ADDR=8.8.8.8            \
         -e MAX_QPS=1000                       \
-        -it guessi/dnsperf:alpine
+        -it nikolay2007/dnsperf
 
 Or run dnsperf with customized testing data:
 
@@ -31,7 +31,7 @@ Or run dnsperf with customized testing data:
         -e MAX_TEST_SECONDS=60                \
         -e DNS_SERVER_ADDR=8.8.8.8            \
         -e MAX_QPS=1000                       \
-        -it guessi/dnsperf:alpine
+        -it nikolay2007/dnsperf
 
 
 ## Benchmark inside Kubernetes system
