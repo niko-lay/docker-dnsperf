@@ -18,7 +18,7 @@ plus.google.com A
 EOF
 fi
 
-dnsperf -l ${MAX_TEST_SECONDS} \
+exec dnsperf -l ${MAX_TEST_SECONDS} \
         -s ${DNS_SERVER_ADDR} \
         -Q ${MAX_QPS} \
         -d /opt/records.txt
